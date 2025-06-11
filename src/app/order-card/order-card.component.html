@@ -1,0 +1,19 @@
+<div class="card mb-4 shadow-sm">
+  <div class="card-body">
+    <h5 class="card-title mb-4">Objednávka #{{ orderInformation.id }}</h5>
+
+    <p class="mb-2"><strong>Datum doručení:</strong> {{ orderInformation.deliveryDate }}</p>
+    <p class="mb-2"><strong>Adresa:</strong> {{ orderInformation.address }}</p>
+    <p class="mb-2"><strong>Stav:</strong> {{ orderInformation.status }}</p>
+    <p class="mb-3"><strong>Celková cena:</strong> {{ orderInformation.totalPrice }} Kč</p>
+
+    <hr class="mb-3" />
+
+    <div *ngFor="let item of orderInformation.items" class="row fs-6 py-2 border-bottom align-items-center">
+      <div class="col-md-5">{{ item.productName }}</div>
+      <div class="col-md-2">{{ item.quantity }} ks</div>
+      <div class="col-md-2">{{ item.priceAtTime }} Kč / ks</div>
+      <div class="col-md-3 text-end">{{ item.quantity * item.priceAtTime }} Kč</div>
+    </div>
+  </div>
+</div>

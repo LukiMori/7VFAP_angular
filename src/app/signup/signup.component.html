@@ -1,0 +1,76 @@
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="w-100" style="max-width: 600px;">
+    <div class="card border-0 w-100 p-4">
+      <h4 class="text-center mb-4">Registrace</h4>
+
+      <form [formGroup]="signupForm" (ngSubmit)="signup()">
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label>Email</label>
+          <input type="email" formControlName="email" class="form-control" />
+          <div *ngIf="signupButtonClicked && signupForm.get('email')?.errors">
+            <div *ngIf="signupForm.get('email')?.errors?.['required']" class="alert alert-danger mt-2">Email je povinný.</div>
+            <div *ngIf="signupForm.get('email')?.errors?.['email']" class="alert alert-danger mt-2">Email musí být ve správném formátu.</div>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label>Heslo</label>
+          <input type="password" formControlName="password" class="form-control" />
+          <div *ngIf="signupButtonClicked && signupForm.get('password')?.errors">
+            <div *ngIf="signupForm.get('password')?.errors?.['required']" class="alert alert-danger mt-2">Heslo je povinné.</div>
+            <div *ngIf="signupForm.get('password')?.errors?.['pattern']" class="alert alert-danger mt-2">Heslo musí mít alespoň 8 znaků, obsahovat jedno velké písmeno a jednu číslici.</div>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="mb-3">
+          <label>Potvrďte heslo</label>
+          <input type="password" formControlName="confirmPassword" class="form-control" />
+          <div *ngIf="signupButtonClicked && !passwordsMatch()" class="alert alert-danger mt-2">Hesla se neshodují.</div>
+        </div>
+
+        <!-- First Name -->
+        <div class="mb-3">
+          <label>Jméno</label>
+          <input type="text" formControlName="firstName" class="form-control" />
+          <div *ngIf="signupButtonClicked && signupForm.get('firstName')?.errors?.['required']" class="alert alert-danger mt-2">Jméno je povinné.</div>
+        </div>
+
+        <!-- Last Name -->
+        <div class="mb-3">
+          <label>Příjmení</label>
+          <input type="text" formControlName="lastName" class="form-control" />
+          <div *ngIf="signupButtonClicked && signupForm.get('lastName')?.errors?.['required']" class="alert alert-danger mt-2">Příjmení je povinné.</div>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="mb-3">
+          <label>Telefonní číslo</label>
+          <input type="text" formControlName="phoneNumber" class="form-control" />
+          <div *ngIf="signupButtonClicked && signupForm.get('phoneNumber')?.errors">
+            <div *ngIf="signupForm.get('phoneNumber')?.errors?.['required']" class="alert alert-danger mt-2">Telefonní číslo je povinné.</div>
+            <div *ngIf="signupForm.get('phoneNumber')?.errors?.['pattern']" class="alert alert-danger mt-2">Telefonní číslo musí mít 9 číslic (např. 123456789).</div>
+          </div>
+        </div>
+
+        <!-- Response Message -->
+        <div *ngIf="responseMsg" class="alert mb-3" [ngClass]="{'alert-success': responseMsg.startsWith('Uživatele s emailem'), 'alert-danger': !responseMsg.startsWith('Uživatele s emailem')}">
+          {{ responseMsg }}
+        </div>
+
+        <!-- Submit Button -->
+        <div class="d-flex flex-column align-items-center">
+          <button type="submit" class="btn btn-primary mb-3" style="min-width: 180px; max-width: 100%;">Registrovat se</button>
+
+          <p class="mb-2 text-center">Už máte účet?</p>
+
+          <button type="button" class="btn btn-outline-secondary" (click)="router.navigate(['/login'])" style="min-width: 180px; max-width: 100%;">Přihlásit se</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

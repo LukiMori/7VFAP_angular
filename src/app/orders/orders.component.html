@@ -1,0 +1,15 @@
+<div *ngIf="loading" class="spinner-border d-block mx-auto mt-5" role="status"></div>
+
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<div *ngIf="!loading && !error" class="py-5 container">
+  <h2 class="mb-4 text-center">Moje objednávky</h2>
+
+  <div *ngIf="orders.length === 0" class="alert alert-info">
+    Nemáte žádné objednávky.
+  </div>
+
+  <div *ngFor="let order of orders">
+    <app-order-card [orderInformation]="order"></app-order-card>
+  </div>
+</div>

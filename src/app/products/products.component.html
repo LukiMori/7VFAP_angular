@@ -1,0 +1,19 @@
+<div class="py-4 container">
+  <h2 class="mb-4">Produkty</h2>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status"></div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="!loading && !error && products.length === 0" class="alert alert-info">
+    Žádné produkty v nabídce.
+  </div>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <div class="col" *ngFor="let product of products | slice:0:products.length">
+      <app-product-card [product]="product"></app-product-card>
+    </div>
+  </div>
+</div>

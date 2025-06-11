@@ -1,0 +1,82 @@
+<form (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label class="form-label fw-bold">Zkontrolujte/zadejte adresu</label>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-8">
+      <div class="mb-3">
+        <label class="form-label">Ulice</label>
+        <input
+          type="text"
+          class="form-control"
+          name="street"
+          [(ngModel)]="formData.street"
+          placeholder="Např. Dlouhá"
+        />
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label class="form-label">Číslo domu</label>
+        <input
+          type="text"
+          class="form-control"
+          name="houseNumber"
+          [(ngModel)]="formData.houseNumber"
+          placeholder="Např. 123"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label class="form-label">Město/obec</label>
+        <input
+          type="text"
+          class="form-control"
+          name="city"
+          [(ngModel)]="formData.city"
+          placeholder="Např. Praha"
+        />
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="mb-3">
+        <label class="form-label">PSČ</label>
+        <input
+          type="text"
+          class="form-control"
+          name="zip"
+          [(ngModel)]="formData.zip"
+          placeholder="Např. 11000"
+          autocomplete="postal-code"
+        />
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="mb-3">
+        <label class="form-label">Stát</label>
+        <input
+          type="text"
+          class="form-control"
+          name="country"
+          [(ngModel)]="formData.country"
+          placeholder="Např. Česko"
+          autocomplete="country-name"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between mt-4">
+    <button type="button" class="btn btn-secondary" (click)="goBack()">
+      Zpět
+    </button>
+    <button type="submit" class="btn btn-primary">
+      Potvrdit adresu
+    </button>
+  </div>
+</form>

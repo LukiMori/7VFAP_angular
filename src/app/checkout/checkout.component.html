@@ -1,0 +1,114 @@
+<div class="py-5 container">
+  <h2 class="mb-4 text-center">Rekapitulace objednávky</h2>
+
+  <div *ngIf="error" class="alert alert-danger mb-3">{{ error }}</div>
+
+  <div class="row">
+    <!-- Left Column -->
+    <div class="col-md-6">
+      <!-- User Info -->
+      <div class="card mb-4 p-3 shadow-sm">
+        <h5>Údaje zákazníka</h5>
+        <p><strong>Jméno:</strong> {{ user?.firstName }} {{ user?.lastName }}</p>
+        <p><strong>Telefon:</strong> {{ user?.phoneNumber }}</p>
+        <p><strong>Email:</strong> {{ user?.email }}</p>
+      </div>
+
+      <!-- Address Selection -->
+      <div class="card p-3 shadow-sm mb-3">
+        <div class="mb-3">
+          <label>Vyberte doručovací adresu</label>
+          <ng-container *ngIf="addresses.length > 0; else noAddresses">
+            <select class="form-select"
+                    [(ngModel)]="selectedAddressIndex"
+                    [ngModelOptions]="{standalone: true}">
+              <option [value]="-1">-- Vyberte adresu --</option>
+              <option *ngFor="let addr of addresses; let idx = index" [value]="idx">
+                {{ addr.street }} {{ addr.houseNumber }}, {{ addr.zipCode }} {{ addr.city }}, {{ addr.country }}
+              </option>
+            </select>
+          </ng-container>
+          <ng-template #noAddresses>
+            <div class="text-muted">Nemáte žádné uložené adresy.</div>
+          </ng-template>
+        </div>
+
+        <!-- Delivery Date -->
+        <div class="mb-3">
+          <label>Zvolte datum doručení</label>
+          <input type="date"
+                 class="form-control"
+                 [(ngModel)]="deliveryDate"
+                 [ngModelOptions]="{standalone: true}"
+                 [min]="minDate"
+                 [max]="maxDate">
+        </div>
+
+        <!-- Toggle New Address Form -->
+        <button *ngIf="addresses.length > 0"
+                class="btn btn-outline-primary"
+                (click)="showNewAddressForm = !showNewAddressForm; activeStep = 1">
+          {{ showNewAddressForm ? 'Zavřít formulář' : 'Přidat novou adresu' }}
+        </button>
+      </div>
+
+      <!-- New Address Form Steps -->
+      <ng-container *ngIf="showNewAddressForm">
+        <ng-container *ngIf="activeStep === 1">
+          <app-step-suggest (selected)="onSelected($event)"></app-step-suggest>
+        </ng-container>
+
+        <ng-container *ngIf="activeStep === 2">
+          <app-step-form
+            [formData]="formData"
+            (formChange)="formData = $event"
+            (formSubmitted)="activeStep = 3"
+            (previous)="activeStep = 1">
+          </app-step-form>
+        </ng-container>
+
+        <ng-container *ngIf="activeStep === 3">
+          <app-step-check
+            [formData]="formData"
+            (confirmed)="finalResult = $event; activeStep = 4"
+            (previous)="activeStep = 2">
+          </app-step-check>
+        </ng-container>
+
+        <ng-container *ngIf="activeStep === 4">
+          <app-step-summary
+            [formData]="formData"
+            [finalResult]="finalResult"
+            (restart)="onRestart()"
+            (addressAdded)="handleAddressAdded($event)">
+          </app-step-summary>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <!-- Right Column -->
+    <div class="col-md-6">
+      <div class="card p-3 shadow-sm mb-3">
+        <h5>Souhrn objednávky</h5>
+
+        <ng-container *ngIf="cartItems.length === 0; else cartContent">
+          <div class="alert alert-info">Košík je prázdný.</div>
+        </ng-container>
+
+        <ng-template #cartContent>
+          <div *ngFor="let item of cartItems" class="border-bottom pb-2 mb-2">
+            <strong>{{ item.productName }}</strong>
+            <div class="small text-muted">
+              {{ item.quantity }} ks × {{ item.price }} Kč = {{ item.quantity * item.price }} Kč
+            </div>
+          </div>
+
+          <h5 class="mt-3">Celkem: {{ total }} Kč</h5>
+          <button class="btn btn-success mt-3 w-100" (click)="handleOrderConfirm()">
+            Potvrdit objednávku
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

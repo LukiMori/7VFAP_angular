@@ -1,0 +1,57 @@
+<div class="d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-4">
+        <div class="card p-4 shadow-sm border-0">
+          <h4 class="text-center mb-4">Přihlášení</h4>
+
+          <form (ngSubmit)="login()">
+            <!-- Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input
+                id="email"
+                type="text"
+                class="form-control"
+                placeholder="Zadejte email"
+                [(ngModel)]="email"
+                name="email"
+                (ngModelChange)="validateFields()"
+              />
+              <div *ngIf="!validEmail && loginButtonClicked" class="alert alert-danger mt-2">
+                Email je povinný.
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Heslo</label>
+              <input
+                id="password"
+                type="password"
+                class="form-control"
+                placeholder="Zadejte heslo"
+                [(ngModel)]="password"
+                name="password"
+                (ngModelChange)="validateFields()"
+              />
+              <div *ngIf="!validPassword && loginButtonClicked" class="alert alert-danger mt-2">
+                Heslo je povinné.
+              </div>
+            </div>
+
+            <!-- Login error -->
+            <div *ngIf="loginError" class="alert alert-danger mb-3">
+              {{ loginError }}
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary w-100">
+              Přihlásit se
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

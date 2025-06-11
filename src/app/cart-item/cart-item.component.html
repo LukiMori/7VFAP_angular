@@ -1,0 +1,31 @@
+<div class="card shadow-sm p-3 d-flex flex-column flex-md-row align-items-center">
+  <div class="flex-shrink-0 mb-3 mb-md-0 me-md-4" style="cursor: pointer;" (click)="navigateToProduct()">
+    <img [src]="cartItem.imageUrl" [alt]="cartItem.productName" style="width: 150px; height: 150px; object-fit: contain;">
+  </div>
+
+  <div class="flex-grow-1 w-100">
+    <h5 class="fw-bold mb-2" style="cursor: pointer;" (click)="navigateToProduct()">{{ cartItem.productName }}</h5>
+
+    <div class="mb-3">
+      <span class="fw-semibold">Cena za kus:</span> {{ cartItem.price.toFixed(2) }} Kč
+    </div>
+
+    <div class="mb-3 d-flex align-items-center">
+      <button class="btn btn-outline-secondary me-2" (click)="handleQuantityChange(cartItem.quantity - 1)">-</button>
+      <input
+        type="number"
+        class="form-control"
+        min="1"
+        [value]="cartItem.quantity"
+        (change)="handleQuantityChange(getValueAsNumber($event))"
+      />
+      <button class="btn btn-outline-secondary ms-2" (click)="handleQuantityChange(cartItem.quantity + 1)">+</button>
+    </div>
+
+    <div class="mb-3">
+      <span class="fw-semibold">Celkem:</span> {{ (cartItem.price * cartItem.quantity).toFixed(2) }} Kč
+    </div>
+
+    <button class="btn btn-outline-danger" (click)="removeItem()">Odebrat z košíku</button>
+  </div>
+</div>

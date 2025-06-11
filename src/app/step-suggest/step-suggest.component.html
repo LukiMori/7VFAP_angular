@@ -1,0 +1,29 @@
+<div class="mb-3">
+  <label class="form-label fw-bold">Zadejte adresu</label>
+  <input
+    type="text"
+    class="form-control"
+    [(ngModel)]="value"
+    (ngModelChange)="onInputChange($event)"
+    placeholder="Např. Dlouhá 123, Praha"
+  />
+</div>
+
+<ul class="list-group mb-3" *ngIf="suggestions.length > 0">
+  <li
+    *ngFor="let suggestion of suggestions"
+    class="list-group-item list-group-item-action"
+    (click)="onSuggestionClick(suggestion)"
+    style="cursor: pointer"
+  >
+    <strong>{{ suggestion.name }}</strong>
+    <br />
+    <span class="text-muted">{{ suggestion.location }}</span>
+  </li>
+</ul>
+
+<div class="d-flex justify-content-start mt-3">
+  <button class="btn btn-secondary" (click)="onManualEntry()">
+    Zadat adresu ručně
+  </button>
+</div>

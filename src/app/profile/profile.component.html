@@ -1,0 +1,124 @@
+<ng-container *ngIf="!isLoggedIn; else profileContent">
+<div class="py-5 container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card p-4 shadow-sm">
+          <p class="text-center text-muted">Prosím, přihlaste se nebo zaregistrujte.</p>
+          <ng-container *ngIf="!isLoggedIn; else profileContent">
+            <app-signup></app-signup>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #profileContent>
+  <div class="py-5 container">
+    <h2 class="mb-4 text-center">Můj profil</h2>
+
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    <div *ngIf="info" class="alert alert-info">{{ info }}</div>
+
+    <div class="row">
+      <!-- User Info Column -->
+      <div class="col-md-6">
+        <div class="card mb-4 shadow-sm border-0">
+          <div class="card-body">
+            <form>
+              <!-- Email (disabled) -->
+              <div class="mb-3">
+                <label>Email</label>
+                <input type="email" class="form-control" [value]="updatedUser.email" disabled>
+              </div>
+
+              <!-- First Name -->
+              <div class="mb-3">
+                <label>Jméno</label>
+                <input type="text" class="form-control" name="firstName" [(ngModel)]="updatedUser.firstName" (ngModelChange)="info = null">
+              </div>
+
+              <!-- Last Name -->
+              <div class="mb-3">
+                <label>Příjmení</label>
+                <input type="text" class="form-control" name="lastName" [(ngModel)]="updatedUser.lastName" (ngModelChange)="info = null">
+              </div>
+
+              <!-- Phone Number -->
+              <div class="mb-3">
+                <label>Telefonní číslo</label>
+                <input type="text" class="form-control" name="phoneNumber" [(ngModel)]="updatedUser.phoneNumber" (ngModelChange)="info = null">
+              </div>
+
+              <!-- Save Button -->
+              <div class="d-flex justify-content-center mt-4">
+                <button type="button" class="btn btn-primary" (click)="handleSave()">Uložit změny</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Address Column -->
+      <div class="col-md-6">
+        <div class="card mb-4 shadow-sm border-0">
+          <div class="card-body">
+            <!-- Address Dropdown -->
+            <div class="mb-4">
+              <label>Uložené adresy</label>
+              <ng-container *ngIf="addresses.length > 0; else noAddresses">
+                <select class="form-select">
+                  <option *ngFor="let addr of addresses" [value]="addr.id">
+                    {{ addr.street }} {{ addr.houseNumber }}, {{ addr.zipCode }} {{ addr.city }}, {{ addr.country }}
+                  </option>
+                </select>
+              </ng-container>
+              <ng-template #noAddresses>
+                <div class="text-muted">Zatím nejsou přidány žádné adresy</div>
+              </ng-template>
+            </div>
+
+            <!-- Address Steps -->
+            <div>
+              <label>Adresa</label>
+
+              <!-- Step 1: StepSuggest -->
+              <ng-container *ngIf="activeStep === 1">
+                <app-step-suggest (selected)="onSelected($event)"></app-step-suggest>
+              </ng-container>
+
+              <!-- Step 2: StepForm -->
+              <ng-container *ngIf="activeStep === 2">
+                <app-step-form
+                  [formData]="formData"
+                  (formChange)="formData = $event"
+                  (formSubmitted)="activeStep = 3"
+                  (previous)="activeStep = 1">
+                </app-step-form>
+              </ng-container>
+
+              <!-- Step 3: StepCheck -->
+              <ng-container *ngIf="activeStep === 3">
+                <app-step-check
+                  [formData]="formData"
+                  (confirmed)="onConfirmed($event)"
+                  (previous)="activeStep = 2">
+                </app-step-check>
+              </ng-container>
+
+              <!-- Step 4: StepSummary -->
+              <ng-container *ngIf="activeStep === 4">
+                <app-step-summary
+                  [formData]="formData"
+                  [finalResult]="finalResult"
+                  (restart)="onRestart()"
+                  (addressAdded)="handleAddressAdded($event)">
+                </app-step-summary>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

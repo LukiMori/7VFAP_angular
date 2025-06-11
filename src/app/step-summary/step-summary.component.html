@@ -1,0 +1,52 @@
+<div class="my-3">
+  <ng-container *ngIf="finalResult; else noResult">
+    <div class="alert alert-success">
+      <strong>Dle zadání jsme našli tuto adresu:</strong>
+    </div>
+
+    <ng-container *ngIf="hasValidCoords; else noMap">
+      <app-info-map
+        [latitude]="finalResult.position.lat"
+        [longitude]="finalResult.position.lon"
+        [lang]="'cs'"
+      ></app-info-map>
+    </ng-container>
+
+    <ng-template #noMap>
+      <div class="alert alert-warning">
+        Nelze zobrazit mapu – chybí souřadnice.
+      </div>
+    </ng-template>
+
+    <div class="row mt-4 justify-content-center">
+      <div class="col-auto">
+        <button class="btn btn-primary" (click)="confirm()">
+          Potvrdit adresu
+        </button>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-outline-secondary" (click)="restartSelection()">
+          Vybrat jinou adresu
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noResult>
+    <div class="alert alert-danger">
+      <strong>Uživatel vyplnil údaje, ale takovou adresu jsme nenašli.</strong>
+    </div>
+
+    <div class="mb-3">
+      <pre class="mb-0" style="white-space: pre-wrap;">
+{{ formData | json }}
+      </pre>
+    </div>
+
+    <div class="text-center mt-4">
+      <button class="btn btn-secondary" (click)="restartSelection()">
+        Vybrat jinou adresu
+      </button>
+    </div>
+  </ng-template>
+</div>

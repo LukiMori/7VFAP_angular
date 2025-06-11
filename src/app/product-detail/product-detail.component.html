@@ -1,0 +1,44 @@
+<div *ngIf="loading" class="spinner-border" role="status"></div>
+
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<div *ngIf="!loading && !error && product" class="py-5 container">
+  <div class="row">
+    <!-- Left Column - Image -->
+    <div class="col-md-6 d-flex flex-column align-items-center justify-content-start">
+      <div class="card shadow-sm p-2 mb-3" style="max-width: 500px;">
+        <img [src]="product.imageUrl" [alt]="product.name" style="object-fit: cover;">
+      </div>
+    </div>
+
+    <!-- Right Column - Info -->
+    <div class="col-md-6 d-flex flex-column align-items-center justify-content-center text-center">
+      <h1 class="fw-bold mb-4">{{ product.name }}</h1>
+
+      <div class="card p-3 shadow-sm mb-3 text-center" style="width: 250px;">
+        <h6 class="text-muted mb-1">Cena</h6>
+        <h3 class="fw-semibold text-success">{{ product.price }} Kč</h3>
+      </div>
+
+      <button class="btn btn-success btn-lg" style="width: 180px;" [disabled]="product.quantityInStock <= 0" (click)="addToCart()">
+        Přidat do košíku
+      </button>
+
+      <div class="card p-2 shadow-sm mt-3 text-center" style="width: 250px;">
+        <h6 class="text-muted mb-1">Dostupnost</h6>
+        <h5 [class.text-primary]="product.quantityInStock > 0" [class.text-danger]="product.quantityInStock <= 0">
+          {{ product.quantityInStock > 0 ? (product.quantityInStock + ' ks skladem') : 'Není skladem' }}
+        </h5>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="product.description" class="row mt-5">
+    <div class="col">
+      <div class="card p-4 shadow-sm text-start">
+        <h4 class="fw-semibold mb-3">Popis produktu</h4>
+        <p class="text-muted">{{ product.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>

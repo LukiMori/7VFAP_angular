@@ -1,0 +1,38 @@
+<div *ngIf="loading" class="spinner-border d-block mx-auto mt-5" role="status"></div>
+
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<div *ngIf="!loading && !error" class="py-5 container">
+  <h2 class="mb-4 text-center">Košík</h2>
+
+  <div *ngIf="cartItems.length === 0" class="alert alert-info">
+    Váš košík je prázdný.
+  </div>
+
+  <div *ngIf="cartItems.length > 0">
+    <div *ngFor="let item of cartItems" class="mb-3">
+      <app-cart-item
+        [cartItem]="item"
+        (cartItemChange)="handleCartItemChange($event.updatedItem, $event.removedItemId)">
+      </app-cart-item>
+    </div>
+
+    <div class="card p-4 shadow-sm mt-4 text-center">
+      <h5 class="fw-semibold mb-3">Shrnutí objednávky</h5>
+
+      <div class="row mb-2">
+        <div class="col">Počet položek:</div>
+        <div class="col">{{ totalQuantity }} ks</div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col">Celková cena:</div>
+        <div class="col fw-bold">{{ totalPrice.toFixed(2) }} Kč</div>
+      </div>
+
+      <button type="button" class="btn btn-success btn-lg" (click)="verifyAvailability()">
+        Pokračovat k pokladně
+      </button>
+    </div>
+  </div>
+</div>
