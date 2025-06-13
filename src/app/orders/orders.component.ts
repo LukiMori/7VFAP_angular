@@ -14,6 +14,9 @@ import { OrderCardComponent } from '../order-card/order-card.component';
 })
 export class OrdersComponent implements OnInit {
   orders: OrderInformation[] = [];
+  mainTabs: OrderInformation[] = [];
+  overflowTabs: OrderInformation[] = [];
+  selectedOrderIndex = 0;
   loading = true;
   error: string | null = null;
 
@@ -32,6 +35,8 @@ export class OrdersComponent implements OnInit {
     }).subscribe({
       next: (res) => {
         this.orders = res;
+        this.mainTabs = this.orders.slice(0, 9);
+        this.overflowTabs = this.orders.slice(9);
         this.loading = false;
       },
       error: () => {

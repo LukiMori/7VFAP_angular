@@ -9,7 +9,28 @@
     Nemáte žádné objednávky.
   </div>
 
-  <div *ngFor="let order of orders">
-    <app-order-card [orderInformation]="order"></app-order-card>
+  <ul class="nav nav-tabs">
+    <li class="nav-item" *ngFor="let order of mainTabs; let i = index">
+      <a class="nav-link" [class.active]="selectedOrderIndex === i" (click)="selectedOrderIndex = i">
+        Objednávka {{ i + 1 }}
+      </a>
+    </li>
+
+    <li class="nav-item dropdown" *ngIf="overflowTabs.length > 0">
+      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
+        Více
+      </a>
+      <ul class="dropdown-menu">
+        <li *ngFor="let order of overflowTabs; let i = index">
+          <a class="dropdown-item" (click)="selectedOrderIndex = i + 9">
+            Objednávka {{ i + 10 }}
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="mt-4" *ngIf="orders[selectedOrderIndex]">
+    <app-order-card [orderInformation]="orders[selectedOrderIndex]"></app-order-card>
   </div>
 </div>

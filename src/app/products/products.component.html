@@ -1,6 +1,17 @@
 <div class="py-4 container">
   <h2 class="mb-4">Produkty</h2>
 
+  <form class="mb-3 d-flex flex-wrap gap-2" (submit)="onSearchSubmit($event)">
+    <div class="input-group" style="max-width: 300px;">
+      <input type="text" class="form-control" placeholder="Hledat..." [(ngModel)]="search" name="search">
+      <button class="btn btn-primary" type="submit">Hledat</button>
+    </div>
+
+    <select class="form-select" style="max-width: 200px;" [(ngModel)]="sort" name="sort" (change)="fetchProducts()">
+      <option *ngFor="let option of sortOptions" [value]="option.value">{{ option.label }}</option>
+    </select>
+  </form>
+
   <div *ngIf="loading" class="text-center">
     <div class="spinner-border" role="status"></div>
   </div>
@@ -12,8 +23,30 @@
   </div>
 
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-    <div class="col" *ngFor="let product of products | slice:0:products.length">
+    <div class="col" *ngFor="let product of products">
       <app-product-card [product]="product"></app-product-card>
     </div>
   </div>
+
+  <nav *ngIf="totalPages > 1" class="mt-4 d-flex justify-content-center">
+    <ul class="pagination">
+      <li class="page-item" [class.disabled]="page === 0">
+        <button class="page-link" (click)="setPage(0)">«</button>
+      </li>
+      <li class="page-item" [class.disabled]="page === 0">
+        <button class="page-link" (click)="setPage(page - 1)">‹</button>
+      </li>
+
+      <li class="page-item" *ngFor="let p of [].constructor(totalPages); let i = index" [class.active]="page === i">
+        <button class="page-link" (click)="setPage(i)">{{ i + 1 }}</button>
+      </li>
+
+      <li class="page-item" [class.disabled]="page >= totalPages - 1">
+        <button class="page-link" (click)="setPage(page + 1)">›</button>
+      </li>
+      <li class="page-item" [class.disabled]="page >= totalPages - 1">
+        <button class="page-link" (click)="setPage(totalPages - 1)">»</button>
+      </li>
+    </ul>
+  </nav>
 </div>
