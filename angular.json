@@ -26,7 +26,6 @@
             "assets": [
               "src/assets",
               {
-
                 "glob": "**/*",
                 "input": "public"
               }

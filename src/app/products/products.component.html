@@ -1,52 +1,51 @@
-<div class="py-4 container">
-  <h2 class="mb-4">Produkty</h2>
+<div class="container py-4" style="max-width: 1200px;">
+  <h2 class="mb-3">Produkty</h2>
 
-  <form class="mb-3 d-flex flex-wrap gap-2" (submit)="onSearchSubmit($event)">
-    <div class="input-group" style="max-width: 300px;">
-      <input type="text" class="form-control" placeholder="Hledat..." [(ngModel)]="search" name="search">
-      <button class="btn btn-primary" type="submit">Hledat</button>
-    </div>
-
-    <select class="form-select" style="max-width: 200px;" [(ngModel)]="sort" name="sort" (change)="fetchProducts()">
-      <option *ngFor="let option of sortOptions" [value]="option.value">{{ option.label }}</option>
-    </select>
-  </form>
-
-  <div *ngIf="loading" class="text-center">
-    <div class="spinner-border" role="status"></div>
+  <div class="mb-3 d-flex justify-content-end">
+    <input
+      type="text"
+      pInputText
+      [(ngModel)]="search"
+      (ngModelChange)="onSearchChange()"
+      placeholder="Hledat produkty"
+      style="max-width: 300px;"
+    />
   </div>
 
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <p-table
+    [value]="products"
+    [lazy]="true"
+    [paginator]="true"
+    [rows]="size"
+    [totalRecords]="totalRecords"
+    [loading]="loading"
+    [rowsPerPageOptions]="[6, 12, 24]"
+    (onLazyLoad)="loadProducts($event)"
+    [responsiveLayout]="'scroll'"
+    [style]="{ minWidth: '100%' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="name">Název <p-sortIcon field="name" /></th>
+        <th pSortableColumn="price">Cena <p-sortIcon field="price" /></th>
+        <th pSortableColumn="quantityInStock">Skladem <p-sortIcon field="quantityInStock" /></th>
+        <th>Značka</th>
+      </tr>
+    </ng-template>
 
-  <div *ngIf="!loading && !error && products.length === 0" class="alert alert-info">
-    Žádné produkty v nabídce.
-  </div>
+    <ng-template pTemplate="body" let-product>
+      <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.price | currency:'CZK':'symbol-narrow' }}</td>
+        <td>{{ product.quantityInStock }}</td>
+        <td>{{ product.brandName }}</td>
+      </tr>
+    </ng-template>
 
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-    <div class="col" *ngFor="let product of products">
-      <app-product-card [product]="product"></app-product-card>
-    </div>
-  </div>
-
-  <nav *ngIf="totalPages > 1" class="mt-4 d-flex justify-content-center">
-    <ul class="pagination">
-      <li class="page-item" [class.disabled]="page === 0">
-        <button class="page-link" (click)="setPage(0)">«</button>
-      </li>
-      <li class="page-item" [class.disabled]="page === 0">
-        <button class="page-link" (click)="setPage(page - 1)">‹</button>
-      </li>
-
-      <li class="page-item" *ngFor="let p of [].constructor(totalPages); let i = index" [class.active]="page === i">
-        <button class="page-link" (click)="setPage(i)">{{ i + 1 }}</button>
-      </li>
-
-      <li class="page-item" [class.disabled]="page >= totalPages - 1">
-        <button class="page-link" (click)="setPage(page + 1)">›</button>
-      </li>
-      <li class="page-item" [class.disabled]="page >= totalPages - 1">
-        <button class="page-link" (click)="setPage(totalPages - 1)">»</button>
-      </li>
-    </ul>
-  </nav>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4" class="text-center">Žádné produkty k zobrazení.</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
